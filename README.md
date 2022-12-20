@@ -9,6 +9,7 @@
 Hummingbot is an open source client-side framework that helps you build, manage, and run automated trading strategies, or **bots**. This code is free and publicly available under the Apache 2.0 open source license!
 
 Albert is modifying this for backtesting purposes!
+1:23:48 for pycharm
 
 ### [Docs](https://hummingbot.org/docs/) · [Install](https://hummingbot.org/installation/) · [FAQ](https://hummingbot.org/faq/) ·  [Developers](https://hummingbot.org/developers/) · [CEX Connectors](#centralized-exchange-connectors) · [DEX Connectors](#decentralized-exchange-connectors)
 

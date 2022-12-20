@@ -21,6 +21,7 @@ from hummingbot.strategy.market_trading_pair_tuple import MarketTradingPairTuple
 from hummingbot.strategy.order_book_asset_price_delegate cimport OrderBookAssetPriceDelegate
 from hummingbot.strategy.strategy_base import StrategyBase
 from hummingbot.strategy.utils import order_age
+from hummingbot.strategy.__utils__.trailing_indicators.instant_volatility import InstantVolatilityIndicator
 from .data_types import PriceSize, Proposal
 from .inventory_cost_price_delegate import InventoryCostPriceDelegate
 from .inventory_skew_calculator cimport c_calculate_bid_ask_ratios_from_base_asset_ratio
@@ -85,7 +86,8 @@ cdef class PureMarketMakingStrategy(StrategyBase):
                     bid_order_level_spreads: List[Decimal] = None,
                     ask_order_level_spreads: List[Decimal] = None,
                     should_wait_order_cancel_confirmation: bool = True,
-                    moving_price_band: Optional[MovingPriceBand] = None
+                    moving_price_band: Optional[MovingPriceBand] = None,
+                    volatility_sample_length: int = 15,
                     ):
         if order_override is None:
             order_override = {}
@@ -145,6 +147,7 @@ cdef class PureMarketMakingStrategy(StrategyBase):
         self._should_wait_order_cancel_confirmation = should_wait_order_cancel_confirmation
         self._moving_price_band = moving_price_band
         self.c_add_markets([market_info.market])
+        self._volatility_calculator = InstantVolatilityIndicator(volatility_sample_length)
 
     def all_markets_ready(self):
         return all([market.ready for market in self._sb_markets])
@@ -745,6 +748,10 @@ cdef class PureMarketMakingStrategy(StrategyBase):
                                           f"making may be dangerous when markets or networks are unstable.")
 
             proposal = None
+            self.logger().info(f"Current sample: {self.get_price()}")
+            self._volatility_calculator.add_sample(float(self.get_price()))
+            if self._volatility_calculator.is_sampling_buffer_full:
+                self.logger().info(f"Current volatility is: {self._volatility_calculator.current_value}" )
             if self._create_timestamp <= self._current_timestamp:
                 # 1. Create base order proposals
                 proposal = self.c_create_base_proposal()

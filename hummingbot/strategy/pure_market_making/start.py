@@ -102,6 +102,7 @@ def start(self):
         should_wait_order_cancel_confirmation = c_map.get("should_wait_order_cancel_confirmation")
 
         strategy_logging_options = PureMarketMakingStrategy.OPTION_LOG_ALL
+        volatility_sample_length = c_map.get("volatility_sample_length").value
         self.strategy = PureMarketMakingStrategy()
         self.strategy.init_params(
             market_info=MarketTradingPairTuple(*maker_data),
@@ -139,7 +140,8 @@ def start(self):
             bid_order_level_spreads=bid_order_level_spreads,
             ask_order_level_spreads=ask_order_level_spreads,
             should_wait_order_cancel_confirmation=should_wait_order_cancel_confirmation,
-            moving_price_band=moving_price_band
+            moving_price_band=moving_price_band,
+            volatility_sample_length=volatility_sample_length,
         )
     except Exception as e:
         self.notify(str(e))

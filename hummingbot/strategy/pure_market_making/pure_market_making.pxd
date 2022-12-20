@@ -58,6 +58,7 @@ cdef class PureMarketMakingStrategy(StrategyBase):
         bint _should_wait_order_cancel_confirmation
 
         object _moving_price_band
+        object _volatility_calculator
 
     cdef object c_get_mid_price(self)
     cdef object c_create_base_proposal(self)

@@ -445,4 +445,10 @@ pure_market_making_config_map = {
                       "split_order_levels_enabled").value,
                   type_str="str",
                   validator=validate_decimal_list),
+    "volatility_sample_length":
+        ConfigVar(key="volatility_sample_length",
+                          prompt="How many samples are needed to calculate volatility? >>> ",
+                          type_str="int",
+                          validator=lambda v: validate_int(v, min_value=1, inclusive=True),
+                          default=15),
 }

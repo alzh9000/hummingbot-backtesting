@@ -48,7 +48,7 @@ GATEAWAY_CLIENT_CERT_PATH = CERTS_PATH / "client_cert.pem"
 GATEAWAY_CLIENT_KEY_PATH = CERTS_PATH / "client_key.pem"
 
 PAPER_TRADE_EXCHANGES = [  # todo: fix after global config map refactor
-    "binance_paper_trade",
+    "binance_us_paper_trade",
     "kucoin_paper_trade",
     "ascend_ex_paper_trade",
     "gate_io_paper_trade",
